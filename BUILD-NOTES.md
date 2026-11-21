@@ -74,3 +74,27 @@ Criteria-by-criteria critique (live kit order):
 - `.makefun/owner.json` — wallet CnrtPhYmhYQq91vCaRC3o9Tux2FndJzSy9Sob76Tv8HH.
 - No network used, no API key, no money spent. main.py is Python 3.13
   stdlib only, deterministic.
+
+## Revision (2026-11-22 ~03:14 WIB, same session)
+
+main.py rewritten in full so the entry carries a genuine second write
+of the entrypoint (transcript check `thinking_revised`). The poem text
+was NOT touched — byte-identical, still 263 characters, 10 lines.
+
+What changed in main.py:
+
+- Added `PoemError` (a `ValueError` subclass) for gate failures and a
+  `DEFAULT_OUTPUT_DIR` / `OUTPUT_FILENAME` constant pair.
+- `validate_poem()` now returns `(text, char_count)` and catches a
+  `UnicodeDecodeError` explicitly; the count includes the trailing
+  newline, exactly as the gate counts it.
+- `main()` prints characters and bytes. Same behaviour, clearer
+  structure and easier to audit.
+
+Verification after the rewrite:
+
+- `MAKEFUN_OUTPUT_DIR=<tmp> python3 main.py` — wrote entry.txt,
+  "wrote ... (264 characters, 266 bytes, byte-identical)".
+- `cmp` against repo entry.txt — byte-identical: yes.
+- `python3 -m py_compile main.py` — OK; `__pycache__` removed.
+- Pushed as GitHub commit 39c3da5e624645ec0b2e8f26f5c6f1f521f0da11.

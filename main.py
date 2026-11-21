@@ -24,8 +24,12 @@ class PoemError(ValueError):
 def load_entry_bytes():
     """Read the bundled poem as raw bytes, next to this file."""
     here = os.path.dirname(os.path.abspath(__file__))
-    with open(os.path.join(here, "entry.txt"), "rb") as f:
-        return f.read()
+    path = os.path.join(here, "entry.txt")
+    try:
+        with open(path, "rb") as f:
+            return f.read()
+    except FileNotFoundError as exc:
+        raise PoemError("bundled entry.txt is missing: %s" % path) from exc
 
 
 def validate_poem(data):
